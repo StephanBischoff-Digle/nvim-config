@@ -36,7 +36,6 @@ return require'packer'.startup(function()
         'kyazdani42/nvim-tree.lua',
         requires = {'kyazdani42/nvim-web-devicons'},
         config = [[require'config.nvim_tree']],
-        opt = false,
     }
 
     use {
@@ -62,6 +61,7 @@ return require'packer'.startup(function()
     use {
         'folke/todo-comments.nvim',
         requires = {'folke/trouble.nvim'},
+        after = {'nvim-lspconfig', 'telescope.nvim', 'nvim-treesitter'},
         config = function() require'todo-comments'.setup() end
     }
 
