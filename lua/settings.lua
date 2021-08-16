@@ -1,5 +1,3 @@
-print("Loading Settings")
-
 local o = vim.o
 local opt = vim.opt
 
@@ -50,21 +48,6 @@ autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank{timeout=250}
 ]])
 
 
--- lsp cursorhold
-vim.api.nvim_command([[
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
-]])
 
--- colorscheme
-vim.cmd [[
-    colorscheme OceanicNext
-]]
-
--- lightline
-vim.g['lightline'] = { colorscheme = 'oceanicnext' }
-
--- quickscope
-vim.g['qs_highlight_on_keys'] = {'f', 'F', 't', 'T' }
-vim.g['qs_max_chars'] = 150
 
 

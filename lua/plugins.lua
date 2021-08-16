@@ -22,14 +22,31 @@ vim.cmd [[packadd packer.nvim]]
 return require'packer'.startup(function()
     use 'wbthomason/packer.nvim'
 
-    use 'mhartington/oceanic-next'
+    use {
+        'mhartington/oceanic-next',
+        config = [[require'config.oceanicnext']]
+    }
 
-    use 'kyazdani42/nvim-tree.lua'
-    use 'kyazdani42/nvim-web-devicons'
+    use {
+        'itchyny/lightline.vim',
+        config = [[require'config.lightline']]
+    }
 
-    use 'unblevable/quick-scope'
-    use 'itchyny/lightline.vim'
-    use 'terryma/vim-smooth-scroll'
+    use {
+        'kyazdani42/nvim-tree.lua',
+        requires = {'kyazdani42/nvim-web-devicons'},
+        config = [[require'config.nvim_tree']],
+        opt = false,
+    }
+
+    use {
+        'unblevable/quick-scope',
+        config = [[require'config.quickscope']]
+    }
+    use {
+        'terryma/vim-smooth-scroll',
+        config = [[require'config.smooth_scroll']]
+    }
     use 'tpope/vim-commentary'
 
     use {
@@ -37,7 +54,10 @@ return require'packer'.startup(function()
         requires = {'nvim-lua/plenary.nvim'},
         config = function() require'gitsigns'.setup() end
     }
-    use 'kdheepak/lazygit.nvim'
+    use {
+        'kdheepak/lazygit.nvim',
+        config = [[require'config.lazygit']]
+    }
 
     use {
         'folke/todo-comments.nvim',

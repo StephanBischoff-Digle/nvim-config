@@ -8,5 +8,10 @@ require'nvim-treesitter.configs'.setup {
         additional_vim_regex_highlighting = false,
     },
     locals = {enabled = true},
+
+    -- lsp cursorhold
+    vim.api.nvim_command([[
+        autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+    ]])
 }
 
