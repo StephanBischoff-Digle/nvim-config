@@ -1,12 +1,13 @@
 local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
     -- enable completion triggered by <c-x><c-o>
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- mappings
     local opts = { noremap=true, silent=true }
+
+    local function buf_set_keymap(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
 
     buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
     buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
@@ -24,8 +25,16 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', opts)
     buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', opts)
     buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
-    buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
+
+    if client.resolved_capabilities.document_formatting then
+        buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
+    elseif client.resolved_capabilities.document_range_formatting then
+        buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.range_formatting()<cr>', opts)
+    end
 end
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local lspconf = require'lspconfig'
 lspconf.rust_analyzer.setup{ on_attach = on_attach }
@@ -51,7 +60,7 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-require'lspconfig'.sumneko_lua.setup {
+lspconf.sumneko_lua.setup {
     cmd = { lua_lsp, "-E", "/usr/share/lua-language-lserver/main.lua" };
     settings = {
         Lua = {
@@ -63,10 +72,37 @@ require'lspconfig'.sumneko_lua.setup {
     }
 }
 
+
 -- Enable diagnostics
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    signs = true,
-    update_in_insert = true,
+-- replace the default lsp diagnostic symbols
+function lspSymbol(name, icon)
+   vim.fn.sign_define("LspDiagnosticsSign" .. name, { text = icon, numhl = "LspDiagnosticsDefault" .. name })
+end
+
+lspSymbol("Error", "")
+lspSymbol("Warning", "")
+lspSymbol("Information", "")
+lspSymbol("Hint", "")
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+   virtual_text = {
+      prefix = "",
+      spacing = 0,
+   },
+   signs = true,
+   underline = true,
+   -- set this to true if you want diagnostics to show in insert mode
+   update_in_insert = false,
 })
+
+-- suppress error messages from lang servers
+vim.notify = function(msg, log_level, _opts)
+   if msg:match "exit code" then
+      return
+   end
+   if log_level == vim.log.levels.ERROR then
+      vim.api.nvim_err_writeln(msg)
+   else
+      vim.api.nvim_echo({ { msg } }, true, {})
+   end
+end

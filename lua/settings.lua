@@ -1,13 +1,25 @@
 local o = vim.o
 local opt = vim.opt
 
--- UI
+-- NOTE: Display
 o.termguicolors = true
 o.background = "light"
-o.number = false
 o.scrolloff = 3
 o.signcolumn = "yes"
 o.showbreak = "↪"
+
+opt.number = true -- display line numbers
+opt.relativenumber = true -- display relative lline numbers
+opt.numberwidth = 2
+opt.signcolumn = 'yes:1'
+opt.cursorline = true
+opt.wrap = true
+opt.linebreak = true
+opt.showmode = false
+
+opt.titlestring = '❐ %t'
+opt.title = true
+opt.titlelen = 70
 
 -- listchars
 opt.listchars = {
@@ -37,17 +49,23 @@ o.undofile = true
 o.fileencoding = "utf-8"
 
 -- TODO: comment
-o.completeopt='menuone,noinsert,noselect'
+o.completeopt = 'menuone,noselect'
 o.shortmess = o.shortmess .. 'c'
 o.updatetime = 3000
+
+
+opt.confirm = true -- prompt to save before destructive actions
+
+-- NOTE: Timings
+opt.updatetime = 300
+opt.timeout = true
+opt.timeoutlen = 1000
+opt.ttimeoutlen = 10
 
 
 -- highlight yank
 vim.api.nvim_command([[
 autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank{timeout=250}
 ]])
-
-
-
 
 

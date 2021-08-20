@@ -18,7 +18,6 @@ vim.cmd [[packadd packer.nvim]]
 -- End of Copy 'n Paste
 
 
-
 return require'packer'.startup(function()
     use 'wbthomason/packer.nvim'
 
@@ -28,8 +27,23 @@ return require'packer'.startup(function()
     }
 
     use {
-        'itchyny/lightline.vim',
-        config = [[require'config.lightline']]
+        'ThePrimeagen/harpoon',
+        require = {'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim'},
+    }
+
+
+    use {
+        'glepnir/galaxyline.nvim',
+        branch = 'main',
+        -- your statusline
+        config = function() require'config.galaxy_line' end,
+        -- some optional icons
+        requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim', 'ThePrimeagen/harpoon'}
+    }
+
+    use {
+        'yamatsum/nvim-nonicons',
+        requires = {'kyazdani42/nvim-web-devicons'}
     }
 
     use {
@@ -59,13 +73,6 @@ return require'packer'.startup(function()
     }
 
     use {
-        'folke/todo-comments.nvim',
-        requires = {'folke/trouble.nvim'},
-        after = {'nvim-lspconfig', 'telescope.nvim', 'nvim-treesitter'},
-        config = function() require'todo-comments'.setup() end
-    }
-
-    use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
         config = [[require'config.treesitter']]
@@ -77,16 +84,79 @@ return require'packer'.startup(function()
         config = [[require'config.lsp']]
     }
 
-    use 'nvim-lua/completion-nvim'
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = {'nvim-lua/plenary.nvim'}
-    }
-
     use {
         'Yggdroot/indentLine',
         config = [[require'config.indent_line']]
     }
 
-end)
+    use {
+        'folke/todo-comments.nvim',
+        requires = {
+            'folke/trouble.nvim',
+            'folke/lsp-colors.nvim',
+            'nvim-lua/plenary.nvim',
+            'neovim/nvim-lspconfig',
+            'nvim-telescope/telescope.nvim',
+            'nvim-treesitter/nvim-treesitter'
+        },
+        after = {'galaxyline.nvim', 'oceanic-next', 'nvim-lspconfig', 'telescope.nvim', 'nvim-treesitter'},
+        config = function() require'todo-comments'.setup() end
+    }
 
+    use {
+        'simrat39/symbols-outline.nvim',
+        requires = {'neovim/nvim-lspconfig'},
+        config = function() require'config.symbols_outline' end
+    }
+
+    use {
+        'romgrk/barbar.nvim',
+        config = require('config.bufferline').config,
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    }
+
+    use {
+        "onsails/lspkind-nvim",
+        requires = {'neovim/nvim-lspconfig'},
+        event = "BufEnter",
+        config = function() require'lspkind'.init() end,
+    }
+
+    use {
+        "windwp/nvim-autopairs",
+        after = "nvim-compe",
+        config = function()
+            require "config.autopairs"
+        end,
+    }
+
+
+    use {
+        'hrsh7th/nvim-compe',
+        event = 'InsertEnter',
+        config = function() require'config.compe' end,
+        wants = 'LuaSnip',
+        requires = {
+            {
+                'L3MON4D3/LuaSnip',
+                wants = 'friendly-snippets',
+                event = 'InsertCharPre',
+                config = function() require'config.luasnip' end,
+            },
+            {
+                'rafamadriz/friendly-snippets',
+                event = 'InsertCharPre',
+            },
+        }
+    }
+
+    use {
+        "ray-x/lsp_signature.nvim",
+        after = "nvim-lspconfig",
+        config = function()
+            require"config.others".signature()
+        end,
+    }
+
+
+end)
