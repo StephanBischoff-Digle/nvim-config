@@ -3,19 +3,20 @@ local opt = vim.opt
 
 -- NOTE: Display
 o.termguicolors = true
-o.background = "light"
+o.background = "dark"
 o.scrolloff = 3
 o.signcolumn = "yes"
 o.showbreak = "↪"
 
-opt.number = true -- display line numbers
-opt.relativenumber = true -- display relative lline numbers
+opt.number = false
+opt.relativenumber = false
 opt.numberwidth = 2
 opt.signcolumn = 'yes:1'
 opt.cursorline = true
 opt.wrap = true
 opt.linebreak = true
 opt.showmode = false
+opt.conceallevel = 0
 
 opt.titlestring = '❐ %t'
 opt.title = true
@@ -25,14 +26,14 @@ opt.titlelen = 70
 opt.listchars = {
     eol = '¬',
     tab = '->',
-    trail = '~',
+    trail = '☗',
     extends = '>',
     precedes = '<',
-    space = '␣'
+    space = '_'
 }
 
 -- Tabs
-local tabwidth = 4
+local tabwidth = 2
 o.tabstop = tabwidth
 o.softtabstop = tabwidth
 o.shiftwidth = tabwidth
@@ -49,7 +50,7 @@ o.undofile = true
 o.fileencoding = "utf-8"
 
 -- TODO: comment
-o.completeopt = 'menuone,noselect'
+opt.completeopt = { 'menuone', 'noselect', 'noinsert'}
 o.shortmess = o.shortmess .. 'c'
 o.updatetime = 3000
 
@@ -68,4 +69,7 @@ vim.api.nvim_command([[
 autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank{timeout=250}
 ]])
 
-
+-- format python files on save
+vim.api.nvim_command([[
+autocmd BufWrite *.py execute ':Black'
+]])

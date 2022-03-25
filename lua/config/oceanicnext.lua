@@ -1,3 +1,3 @@
 -- colorscheme
-vim.cmd [[colorscheme OceanicNext]]
+-- vim.cmd [[colorscheme OceanicNext]]
 

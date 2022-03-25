@@ -21,24 +21,60 @@ vim.cmd [[packadd packer.nvim]]
 return require'packer'.startup(function()
     use 'wbthomason/packer.nvim'
 
+    -- use {
+    --     'rose-pine/neovim',
+    --     config = function() 
+    --         vim.g.rose_pine_variant = 'dawn'
+    --         vim.g.rose_pine_disable_italics = false
+    --         vim.g.rose_pine_bold_vertical_split_line = true
+    --         vim.cmd('colorscheme rose-pine')
+    --     end,
+    -- }
+
     use {
-        'mhartington/oceanic-next',
-        config = [[require'config.oceanicnext']]
+      'Shatur/neovim-ayu',
+      config = function()
+        require'ayu'.setup({
+          mirage = true,
+        })
+        vim.o.background = "dark"
+        require'ayu'.colorscheme()
+      end
     }
+
+
+    -- use {
+    --   "sonph/onehalf",
+    --   rtp = 'vim',
+    --   config = function()
+    --     vim.cmd [[colorscheme onehalflight]]
+    --   end
+
+    -- }
 
     use {
         'ThePrimeagen/harpoon',
         require = {'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim'},
     }
 
+    use {
+        'reedes/vim-pencil',
+        'folke/zen-mode.nvim',
+        config = function()
+            require'zen-mode'.setup()
+        end,
+    }
 
     use {
-        'glepnir/galaxyline.nvim',
-        branch = 'main',
-        -- your statusline
-        config = function() require'config.galaxy_line' end,
-        -- some optional icons
-        requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim', 'ThePrimeagen/harpoon'}
+        'tpope/vim-surround'
+    }
+
+    use {
+        'hoob3rt/lualine.nvim',
+        requires = {'kyazdani42/nvim-web-devicons', opt = true},
+        config = function()
+            require'lualine'.setup({})
+        end
     }
 
     use {
@@ -49,7 +85,7 @@ return require'packer'.startup(function()
     use {
         'kyazdani42/nvim-tree.lua',
         requires = {'kyazdani42/nvim-web-devicons'},
-        config = [[require'config.nvim_tree']],
+        config = function() require'config.nvim_tree' end,
     }
 
     use {
@@ -74,33 +110,22 @@ return require'packer'.startup(function()
 
     use {
         'nvim-treesitter/nvim-treesitter',
+        'nvim-treesitter/playground',
         run = ':TSUpdate',
-        config = [[require'config.treesitter']]
+        config = function()
+            require'config.treesitter'
+        end
     }
 
     use {
         'neovim/nvim-lspconfig',
         requires = { 'nvim-lua/lsp_extensions.nvim' },
-        config = [[require'config.lsp']]
+        config = function() require'config.lsp' end
     }
 
     use {
         'Yggdroot/indentLine',
         config = [[require'config.indent_line']]
-    }
-
-    use {
-        'folke/todo-comments.nvim',
-        requires = {
-            'folke/trouble.nvim',
-            'folke/lsp-colors.nvim',
-            'nvim-lua/plenary.nvim',
-            'neovim/nvim-lspconfig',
-            'nvim-telescope/telescope.nvim',
-            'nvim-treesitter/nvim-treesitter'
-        },
-        after = {'galaxyline.nvim', 'oceanic-next', 'nvim-lspconfig', 'telescope.nvim', 'nvim-treesitter'},
-        config = function() require'todo-comments'.setup() end
     }
 
     use {
@@ -130,7 +155,6 @@ return require'packer'.startup(function()
         end,
     }
 
-
     use {
         'hrsh7th/nvim-compe',
         event = 'InsertEnter',
@@ -156,6 +180,73 @@ return require'packer'.startup(function()
         config = function()
             require"config.others".signature()
         end,
+    }
+
+    use {
+        'phaazon/hop.nvim',
+        as = 'hop',
+        config = function()
+            require'config.hop'
+        end
+    }
+
+    use {
+        'nvim-telescope/telescope.nvim',
+    }
+
+    use {
+        'folke/trouble.nvim',
+        requires = {
+            'kyazdani42/nvim-web-devicons',
+            'neovim/nvim-lspconfig',
+        },
+        config = function() require'trouble'.setup() end
+    }
+
+    use {
+        'folke/todo-comments.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            'folke/trouble.nvim'
+        },
+        config = function() require'config.todo_comments' end
+    }
+
+    -- use {
+    --     'vimwiki/vimwiki',
+    --     requires = {
+    --         'mattn/calendar-vim',
+    --         'Shatur/neovim-ayu',
+    --     },
+    --     config = function() require'config.vimwiki' end
+    -- }
+
+    use {
+        'folke/which-key.nvim',
+        config = function() require'config.which-key' end,
+    }
+
+    use {
+        'noahfrederick/vim-laravel',
+        requires = {
+            'tpope/vim-dispatch',
+            'tpope/vim-projectionist',
+            'noahfrederick/vim-composer',
+            'noahfrederick/vim-laravel',
+        }
+    }
+
+    use {
+        'jwalton512/vim-blade'
+    }
+
+    use {
+        'python/black'
+    }
+
+    use {
+      'cespare/vim-toml'
     }
 
 

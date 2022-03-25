@@ -1,8 +1,6 @@
 local present, compe = pcall(require, 'compe')
 if not present then return end
 
-io.write("Hello compe")
-
 compe.setup {
    enabled = true,
    autocomplete = true,
@@ -21,5 +19,6 @@ compe.setup {
       luasnip = { kind = "﬌", true },
       nvim_lsp = true,
       nvim_lua = true,
+      neorg = true,
    },
 }
