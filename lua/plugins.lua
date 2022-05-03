@@ -21,48 +21,13 @@ vim.cmd [[packadd packer.nvim]]
 return require'packer'.startup(function()
     use 'wbthomason/packer.nvim'
 
-    -- use {
-    --     'rose-pine/neovim',
-    --     config = function() 
-    --         vim.g.rose_pine_variant = 'dawn'
-    --         vim.g.rose_pine_disable_italics = false
-    --         vim.g.rose_pine_bold_vertical_split_line = true
-    --         vim.cmd('colorscheme rose-pine')
-    --     end,
-    -- }
-
     use {
-      'Shatur/neovim-ayu',
+      "projekt0n/github-nvim-theme",
       config = function()
-        require'ayu'.setup({
-          mirage = true,
+        require('github-theme').setup({
+          theme_style = 'light_default'
         })
-        vim.o.background = "dark"
-        require'ayu'.colorscheme()
       end
-    }
-
-
-    -- use {
-    --   "sonph/onehalf",
-    --   rtp = 'vim',
-    --   config = function()
-    --     vim.cmd [[colorscheme onehalflight]]
-    --   end
-
-    -- }
-
-    use {
-        'ThePrimeagen/harpoon',
-        require = {'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim'},
-    }
-
-    use {
-        'reedes/vim-pencil',
-        'folke/zen-mode.nvim',
-        config = function()
-            require'zen-mode'.setup()
-        end,
     }
 
     use {
@@ -73,7 +38,12 @@ return require'packer'.startup(function()
         'hoob3rt/lualine.nvim',
         requires = {'kyazdani42/nvim-web-devicons', opt = true},
         config = function()
-            require'lualine'.setup({})
+            require'lualine'.setup({
+              options = {
+                icons_enabled = true,
+                theme = 'auto'
+              }
+            })
         end
     }
 
@@ -103,14 +73,10 @@ return require'packer'.startup(function()
         requires = {'nvim-lua/plenary.nvim'},
         config = function() require'gitsigns'.setup() end
     }
-    use {
-        'kdheepak/lazygit.nvim',
-        config = [[require'config.lazygit']]
-    }
+
 
     use {
         'nvim-treesitter/nvim-treesitter',
-        'nvim-treesitter/playground',
         run = ':TSUpdate',
         config = function()
             require'config.treesitter'
@@ -121,17 +87,6 @@ return require'packer'.startup(function()
         'neovim/nvim-lspconfig',
         requires = { 'nvim-lua/lsp_extensions.nvim' },
         config = function() require'config.lsp' end
-    }
-
-    use {
-        'Yggdroot/indentLine',
-        config = [[require'config.indent_line']]
-    }
-
-    use {
-        'simrat39/symbols-outline.nvim',
-        requires = {'neovim/nvim-lspconfig'},
-        config = function() require'config.symbols_outline' end
     }
 
     use {
@@ -190,9 +145,6 @@ return require'packer'.startup(function()
         end
     }
 
-    use {
-        'nvim-telescope/telescope.nvim',
-    }
 
     use {
         'folke/trouble.nvim',
@@ -213,29 +165,11 @@ return require'packer'.startup(function()
         config = function() require'config.todo_comments' end
     }
 
-    -- use {
-    --     'vimwiki/vimwiki',
-    --     requires = {
-    --         'mattn/calendar-vim',
-    --         'Shatur/neovim-ayu',
-    --     },
-    --     config = function() require'config.vimwiki' end
-    -- }
-
     use {
         'folke/which-key.nvim',
         config = function() require'config.which-key' end,
     }
 
-    use {
-        'noahfrederick/vim-laravel',
-        requires = {
-            'tpope/vim-dispatch',
-            'tpope/vim-projectionist',
-            'noahfrederick/vim-composer',
-            'noahfrederick/vim-laravel',
-        }
-    }
 
     use {
         'jwalton512/vim-blade'
@@ -247,6 +181,11 @@ return require'packer'.startup(function()
 
     use {
       'cespare/vim-toml'
+    }
+
+    use {
+      'kdheepak/lazygit.nvim',
+      config = function() require'config.lazygit' end,
     }
 
 
